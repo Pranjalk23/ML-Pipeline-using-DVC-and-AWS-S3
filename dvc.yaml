@@ -1,0 +1,42 @@
+stages:
+  data_ingestion:
+    cmd: python Experiments/Src/data_ingestion.py
+    deps:
+    - Experiments/Src/data_ingestion.py
+    #params:
+    #- data_ingestion.test_size
+    outs:
+    - data/raw
+  data_preprocessing:
+    cmd: python Experiments/Src/data_preprocessing.py
+    deps:
+    - data/raw
+    - Experiments/Src/data_preprocessing.py
+    outs:
+    - data/interim
+  feature_engineering:
+    cmd: python Experiments/Src/feature_engineering.py
+    deps:
+    - data/interim
+    - Experiments/Src/feature_engineering.py
+    #params:
+    #- feature_engineering.max_features
+    outs:
+    - data/processed
+  model_building:
+    cmd: python Experiments/Src/model_building.py
+    deps:
+    - data/processed
+    - Experiments/Src/model_building.py
+    #params:
+    #- model_building.n_estimators
+    #- model_building.random_state
+    outs:
+    - models/model.pkl
+  model_evaluation:
+    cmd: python Experiments/Src/model_evaluation.py
+    deps:
+    - models/model.pkl
+    - Experiments/Src/model_evaluation.py
+    metrics:
+    - reports/metrics.json 
